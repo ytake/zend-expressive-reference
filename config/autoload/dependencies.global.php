@@ -5,6 +5,7 @@ use Zend\Expressive\Container;
 use Zend\Expressive\Delegate;
 use Zend\Expressive\Helper;
 use Zend\Expressive\Middleware;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     // Provides application-wide services.
@@ -13,7 +14,7 @@ return [
     'dependencies' => [
         // Use 'aliases' to alias a service name to another service. The
         // key is the alias name, the value is the service to which it points.
-        'aliases' => [
+        'aliases'    => [
             'Zend\Expressive\Delegate\DefaultDelegate' => Delegate\NotFoundDelegate::class,
         ],
         // Use 'invokables' for constructor-less services, or services that do
@@ -21,7 +22,8 @@ return [
         // class name.
         'invokables' => [
             // Fully\Qualified\InterfaceName::class => Fully\Qualified\ClassName::class,
-            Helper\ServerUrlHelper::class => Helper\ServerUrlHelper::class,
+            Helper\ServerUrlHelper::class          => Helper\ServerUrlHelper::class,
+            \Zend\EventManager\EventManager::class => \Zend\EventManager\EventManager::class,
         ],
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories'  => [
@@ -34,6 +36,13 @@ return [
             Zend\Stratigility\Middleware\ErrorHandler::class => Container\ErrorHandlerFactory::class,
             Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
             Middleware\NotFoundHandler::class                => Container\NotFoundHandlerFactory::class,
+            \Psr\Log\LoggerInterface::class                  => \App\Foundation\LoggerFactory::class,
+            \App\Repository\UserRepository::class            => \App\Repository\UserRepositoryFactory::class,
+        ],
+        'delegators' => [
+            \App\Repository\UserRepository::class => [
+                \App\Listener\UserRepositoryListenerDelegatorFactory::class,
+            ],
         ],
     ],
 ];

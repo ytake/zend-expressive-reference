@@ -30,3 +30,4 @@
 
 $app->get('/', App\Action\HomePageAction::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
+$app->get('/user/delegate', App\Action\UserDelegateAction::class, 'user.delegate');

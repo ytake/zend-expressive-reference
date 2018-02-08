@@ -1,20 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Action;
 
 use Psr\Container\ContainerInterface;
-use Zend\Expressive\Router\RouterInterface;
-use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class HomePageFactory
+ */
 class HomePageFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): HomePageAction
     {
-        $router   = $container->get(RouterInterface::class);
-        $template = $container->has(TemplateRendererInterface::class)
-            ? $container->get(TemplateRendererInterface::class)
-            : null;
-
-        return new HomePageAction($router, $template);
+        return new HomePageAction();
     }
 }
